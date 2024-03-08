@@ -1,2 +1,65 @@
 # CODESOFT
-CODESOFT INTERNSHIP TASK1
+package pack1;
+import java.util.Random;
+import java.util.Scanner;
+
+public class NumberGuessingGame {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+        System.out.println("Welcome to the Number Guessing Game!");
+
+        boolean playAgain = true;
+        int totalAttempts = 0;
+        int roundsWon = 0;
+
+        while (playAgain) {
+            int secretNumber = random.nextInt(100) + 1;
+            int attempts = 0;
+
+            System.out.println("\nNew round! Try to guess the number between 1 and 100.");
+
+            while (true) {
+                try {
+                    System.out.print("Enter your guess: ");
+                    int userGuess = scanner.nextInt();
+
+                    if (userGuess == secretNumber) {
+                        System.out.println("Congratulations! You guessed the number " + secretNumber + " correctly in " + (attempts + 1) + " attempts.");
+                        roundsWon++;
+                        totalAttempts += attempts + 1;
+                        break;
+                    } else if (userGuess < secretNumber) {
+                        System.out.println("Too low! Try again.");
+                    } else {
+                        System.out.println("Too high! Try again.");
+                    }
+
+                    attempts++;
+
+                    if (attempts == 10) {
+                        System.out.println("Sorry, you've reached the maximum number of attempts. The correct number was " + secretNumber + ".");
+                        totalAttempts += 10;
+                        break;
+                    }
+
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter a valid number.");
+                    scanner.nextLine(); // Consume the invalid input
+                }
+            }
+
+            System.out.print("Do you want to play again? (yes/no): ");
+            String playAgainInput = scanner.next().toLowerCase();
+            playAgain = playAgainInput.equals("yes");
+        }
+
+        // Display the final score
+        System.out.println("\nGame over! You won " + roundsWon + " round(s) with a total of " + totalAttempts + " attempts.");
+
+        // Close the scanner
+        scanner.close();
+    }
+}
