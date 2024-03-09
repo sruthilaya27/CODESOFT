@@ -1,0 +1,77 @@
+import java.util.Scanner;
+	import java.util.Timer;
+	import java.util.TimerTask;
+
+	class QuizQuestion {
+	    String question;
+	    String[] options;
+	    int correctOptionIndex;
+
+	    public QuizQuestion(String question, String[] options, int correctOptionIndex) {
+	        this.question = question;
+	        this.options = options;
+	        this.correctOptionIndex = correctOptionIndex;
+	    }
+	}
+
+	public class QuizApp {
+	    private static final int QUESTION_TIME_LIMIT = 10; // Time limit for each question in seconds
+	    private static int score = 0;
+
+	    public static void main(String[] args) {
+	        QuizQuestion[] questions = {
+	            new QuizQuestion("What is the capital of France?", new String[]{"A. Berlin", "B. Madrid", "C. Paris", "D. Rome"}, 2),
+	            new QuizQuestion("Which planet is known as the Red Planet?", new String[]{"A. Mars", "B. Venus", "C. Jupiter", "D. Saturn"}, 0),
+	            // Add more questions as needed
+	        };
+
+	        Timer timer = new Timer();
+
+	        for (int i = 0; i < questions.length; i++) {
+	            QuizQuestion currentQuestion = questions[i];
+	            System.out.println("Question " + (i + 1) + ": " + currentQuestion.question);
+	            displayOptions(currentQuestion.options);
+
+	            // Set up a timer for the question
+	            timer.schedule(new TimerTask() {
+	                @Override
+	                public void run() {
+	                    System.out.println("Time's up! Moving to the next question.");
+	                    displayResult(false, currentQuestion.correctOptionIndex);
+	                }
+	            }, QUESTION_TIME_LIMIT * 1000);
+
+	            // Get user input
+	            int userChoice = getUserChoice();
+	            timer.cancel(); // Cancel the timer as the user has answered
+
+	            // Check the answer
+	            displayResult(userChoice == currentQuestion.correctOptionIndex, currentQuestion.correctOptionIndex);
+	        }
+
+	        // Display final score
+	        System.out.println("\nQuiz completed! Your final score: " + score + " out of " + questions.length);
+	    }
+
+	    private static void displayOptions(String[] options) {
+	        for (String option : options) {
+	            System.out.println(option);
+	        }
+	    }
+
+	    private static int getUserChoice() {
+	        Scanner scanner = new Scanner(System.in);
+	        System.out.print("Enter the number of your answer: ");
+	        return scanner.nextInt();
+	    }
+
+	    private static void displayResult(boolean isCorrect, int correctOptionIndex) {
+	        if (isCorrect) {
+	            System.out.println("Correct!\n");
+	            score++;
+	        } else {
+	            System.out.println("Incorrect. The correct answer is option " + (correctOptionIndex + 1) + ".\n");
+	        }
+	    }
+	}
+
